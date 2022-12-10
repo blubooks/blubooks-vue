@@ -78,7 +78,7 @@ export default {
         <li class="nav-item">
           <router-link to="/profile" class="nav-link">
             <font-awesome-icon icon="user" />
-            {{ currentUser.username }}
+            {{ currentUser.email }}
           </router-link>
         </li>
         <li class="nav-item">
