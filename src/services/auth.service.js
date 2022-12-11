@@ -9,7 +9,7 @@ class AuthService {
         password
       })
       .then((response) => {
-        if (response.data.access_token) {
+        if (response.data.accessToken) {
           TokenService.setUser(response.data);
         }
 
