@@ -6,9 +6,9 @@
       </div>
       <div  v-else>
         <div v-if="hasLoaded">
-          <h3>Mandant: {{ data.content.client.title }}</h3>  
-          <div v-for="item in data.content.collections">
-            <router-link :to="{ name: 'collection', params: { id: item.id }}">{{ item.title }}</router-link>
+          <h3>Mandant: {{ data.content.collection.title }}</h3>  
+          <div v-for="item in data.content.books">
+            <router-link :to="{ name: 'book', params: { id: item.id }}">{{ item.title }}</router-link>
           </div>                
         </div>
       </div>
@@ -34,7 +34,7 @@ export default {
   mounted() {
     const route = useRoute();
     this.hasLoaded = false;
-    ClientService.getClient(route.params.id).then(
+    ClientService.getCollection(route.params.id).then(
       (response) => {
         this.hasLoaded = true;
         this.data = response.data;

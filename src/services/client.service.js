@@ -3,7 +3,16 @@ import api from './api';
 class ClientService {
  
   getClients() {
-    return api.get('/clients');
+    return api.get('/page/clients');
+  }
+  getClient(id) {
+    return api.get('/page/client/' + id);
+  }
+  getCollection(id) {
+    return api.get('/page/collection/' + id);
+  }
+  getClientCollections(id) {
+    return api.get('/client/' + id + '/collections');
   }
 
   getUserBoard() {

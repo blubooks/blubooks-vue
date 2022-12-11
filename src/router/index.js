@@ -4,9 +4,33 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: import('../views/HomeView.vue')
+      name: 'clients',
+      component: import('../views/StartView.vue')
     },
+    {
+      path: '/book/:id',
+      name: 'book',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/CollectionView.vue')
+    },    
+    {
+      path: '/collection/:id',
+      name: 'collection',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/CollectionView.vue')
+    },    
+    {
+      path: '/client/:id',
+      name: 'client',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ClientView.vue')
+    },    
     {
       path: '/about',
       name: 'about',
@@ -24,12 +48,25 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
-      path: "/clients",
-      name: "client",
-      // lazy-loaded
-      component: import('../views/HomeView.vue'),
-    },    
+      path: '/:pathMatch(.*)*',
+      name: 'PageNotFound',
+      component: () => import('../views/PageNotFoundView.vue')
+    }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('user');
+
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+     next('/login');
+  } else {
+    next();
+  }
+});
 
 export default router
