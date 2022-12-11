@@ -1,7 +1,6 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import EventBus from "./common/EventBus";
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   computed: {
@@ -41,8 +40,9 @@ export default {
 </script>
 
 <template>
-  <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <header>
+      <div class="container">
+      <nav class="navbar navbar-expand navbar-dark bg-dark">
       <a href="/" class="navbar-brand">bezKoder</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -88,9 +88,11 @@ export default {
         </li>
       </div>
     </nav>
-
+    </div>
+  </header>
+  <main>
     <div class="container">
       <router-view />
     </div>
-  </div>
+  </main>
 </template>
