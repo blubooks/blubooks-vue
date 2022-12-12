@@ -36,9 +36,9 @@
         </Form>
       </div>
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
   import { Form, Field, ErrorMessage } from "vee-validate";
   import * as yup from "yup";
   export default {
@@ -89,9 +89,9 @@
       },
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   label {
     display: block;
     margin-top: 10px;
@@ -124,4 +124,4 @@
   .error-feedback {
     color: red;
   }
-  </style>
+</style>

@@ -6,9 +6,9 @@
       </div>
       <div  v-else>
         <div v-if="hasLoaded">
-          <h3>Mandant: {{ data.content.collection.title }}</h3>  
-          <div v-for="item in data.content.books">
-            <router-link :to="{ name: 'book', params: { id: item.id }}">{{ item.title }}</router-link>
+          <h3>Mandant: {{ data.content.book.title }}</h3>  
+          <div v-for="item in data.content.sections">
+            <router-link :to="{ name: 'section', params: { id: item.id }}">{{ item.title }}</router-link>
           </div>                
         </div>
       </div>
@@ -23,7 +23,7 @@ import { useRoute } from 'vue-router'
 
 
 export default {
-  name: "CollectionView",
+  name: "BookView",
   data() {
     return {
       hasError: false,
@@ -34,7 +34,7 @@ export default {
   mounted() {
     const route = useRoute();
     this.hasLoaded = false;
-    ClientService.getCollection(route.params.id).then(
+    ClientService.getBook(route.params.id).then(
       (response) => {
         this.hasLoaded = true;
         this.data = response.data;
