@@ -20,6 +20,9 @@ class ClientService {
   putSection(id, params) {
     return api.put('/section/' + id, params);
   }      
+  postSection(id, params) {
+    return api.post('/section/' + id, params);
+  }      
   getBook(id) {
     return api.get('/page/book/' + id);
   }  

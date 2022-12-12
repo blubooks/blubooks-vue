@@ -43,7 +43,7 @@
      
         </div>
         <div v-else>
-          <button type="button" class="btn btn-primary" @click="editClick">edit</button>
+          <button type="button" class="btn btn-primary" @click="editClick">edit</button> <button type="button" class="btn btn-primary" @click="addClick">add</button>
           <h1>{{ data.content.section.title }}</h1>
           <div v-html="data.content.section.content"></div>        
         </div>
@@ -81,6 +81,7 @@ export default {
   },  
   data() {
     return {
+      new: false,
       hasError: false,
       hasLoaded: false,
       data: "",
@@ -118,6 +119,30 @@ export default {
     },
 
     saveClick(){
+      if (this.new) {
+        ClientService.postSection(this.$route.params.id,  this.editContent).then(
+        (response) => {
+          if (response.status === 201) {
+            this.loadData();
+          }
+     
+        },
+        (error) => {
+          console.log(error.response.data.error)
+          if (error.response && error.response.data && error.response.data.error) {
+            this.formError = error.response.data.error.message
+            return;
+          }
+          this.formError =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );        
+        return
+      }
       ClientService.putSection(this.$route.params.id,  this.editContent).then(
         (response) => {
           if (response.status === 202) {
@@ -152,14 +177,16 @@ export default {
               error.response.data.message) ||
             error.message ||
             error.toString();
-
         }
       );
-
-
-    },
+    }, 
+    addClick(){
+      this.new = true;
+      this.editContent = {}
+    },    
     loadData() {
       this.hasLoaded = false;
+      this.false = true;
 
       ClientService.getPageSection(this.$route.params.id).then(
         (response) => {
