@@ -13,10 +13,15 @@
       </div>    
       <div class="cols col-2  sticky-nav border-end">
         <ul class="nav flex-column">
+          <NaviNode v-for="node in data.content.sections" :key="node.id" :node="node" :current="currentNavi"  />
+        </ul>
+        <!--
+        <ul class="nav flex-column">
           <li class="nav-item" v-for="item in data.content.sections">
             <router-link :to="{ name: 'section', params: { id: item.id }}" class="nav-link" :class="{ active: item.id ==  $route.params.id }" aria-current="page">{{ item.title }}</router-link>
           </li>          
-        </ul>      
+        </ul>     
+        --> 
       </div>
       <div class="cols col-10">
         <div v-if="editContent">
@@ -66,10 +71,14 @@
 <script>
 import ClientService from "@/services/client.service";
 import EventBus from "@/common/EventBus";
+import NaviNode from '@/components/helper/NaviNode.vue'
 
 
 export default {
   name: "SectionView",
+  components: {
+    NaviNode
+  },  
   data() {
     return {
       hasError: false,
@@ -88,8 +97,26 @@ export default {
   },
   mounted() {
     this.loadData();
+
   },
   methods: {
+
+    findObject(collection, key, value) {
+      for (const o of collection) {
+        for (const [k, v] of Object.entries(o)) {
+          if (k === key && v === value) {
+            return o
+          }
+          if (Array.isArray(v)) {
+            const _o = this.findObject(v, key, value)
+            if (_o) {
+              return _o
+            }
+          }
+        }
+      }
+    },
+
     saveClick(){
       ClientService.putSection(this.$route.params.id,  this.editContent).then(
         (response) => {
@@ -136,6 +163,8 @@ export default {
 
       ClientService.getPageSection(this.$route.params.id).then(
         (response) => {
+          this.currentNavi = this.findObject(response.data.content.sections,"id", this.$route.params.id);
+
           this.editContent = null;
           this.hasLoaded = true;
           this.data = response.data;
