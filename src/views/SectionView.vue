@@ -11,22 +11,30 @@
       <div class="cols col-12">
         <h3>Mandant: {{ data.content.book.title }}</h3>    
       </div>    
-      <div class="cols col-3">
-        <div v-for="item in data.content.sections">
-          <router-link :to="{ name: 'section', params: { id: item.id }}" :class="{ active: item.id ==  $route.params.id }">{{ item.title }}</router-link>
-        </div>  
+      <div class="cols col-2  sticky-nav border-end">
+        <ul class="nav flex-column">
+          <li class="nav-item" v-for="item in data.content.sections">
+            <router-link :to="{ name: 'section', params: { id: item.id }}" class="nav-link" :class="{ active: item.id ==  $route.params.id }" aria-current="page">{{ item.title }}</router-link>
+          </li>          
+        </ul>      
       </div>
-      <div class="cols col-9">
+      <div class="cols col-10">
         <div v-if="editContent">
-          <button type="button" class="btn btn-primary" @click="editClick">SAVE</button>
+          <div v-if="formError">
+              {{formError}}
+          </div>
           <div class="mb-3">
             <label for="form-title" class="form-label">Titel</label>
-            <input type="text" class="form-control" id="form-title" placeholder="name@example.com" :value="editContent.title">
+            <input type="text" class="form-control" id="form-title"  v-model="editContent.title">
           </div>
           <div class="mb-3">
             <label for="form-content" class="form-label">Content</label>
-            <textarea class="form-control" id="form-content">{{ editContent.content }}</textarea>
-          </div>          
+            <textarea class="form-control" rows="20" id="form-content" v-model="editContent.content"></textarea>
+          </div>      
+          <div class="mb-3">
+            <button type="button" class="btn btn-primary" @click="saveClick">SAVE</button>
+
+          </div>               
      
         </div>
         <div v-else>
@@ -45,6 +53,14 @@
     .active {
       font-weight: bold;
     }
+
+    .sticky-nav{        
+        position: sticky;
+        top:  0px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: calc(100vh - 98px );
+    }
 </style>
 
 <script>
@@ -60,6 +76,7 @@ export default {
       hasLoaded: false,
       data: "",
       editContent: null,
+      formError: null,
     };
   },
   watch: {
@@ -73,6 +90,29 @@ export default {
     this.loadData();
   },
   methods: {
+    saveClick(){
+      ClientService.putSection(this.$route.params.id,  this.editContent).then(
+        (response) => {
+          if (response.status === 202) {
+            this.loadData();
+          }
+     
+        },
+        (error) => {
+          console.log(error.response.data.error)
+          if (error.response && error.response.data && error.response.data.error) {
+            this.formError = error.response.data.error.message
+            return;
+          }
+          this.formError =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },    
     editClick(){
       ClientService.getSection(this.$route.params.id).then(
         (response) => {

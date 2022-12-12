@@ -17,6 +17,9 @@ class ClientService {
   getSection(id) {
     return api.get('/section/' + id);
   }    
+  putSection(id, params) {
+    return api.put('/section/' + id, params);
+  }      
   getBook(id) {
     return api.get('/page/book/' + id);
   }  
