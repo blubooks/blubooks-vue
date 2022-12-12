@@ -17,7 +17,25 @@
         </div>  
       </div>
       <div class="cols col-9">
-        {{ data.content.section.content }}
+        <div v-if="editContent">
+          <button type="button" class="btn btn-primary" @click="editClick">SAVE</button>
+          <div class="mb-3">
+            <label for="form-title" class="form-label">Titel</label>
+            <input type="text" class="form-control" id="form-title" placeholder="name@example.com" :value="editContent.title">
+          </div>
+          <div class="mb-3">
+            <label for="form-content" class="form-label">Content</label>
+            <textarea class="form-control" id="form-content">{{ editContent.content }}</textarea>
+          </div>          
+     
+        </div>
+        <div v-else>
+          <button type="button" class="btn btn-primary" @click="editClick">edit</button>
+          <h1>{{ data.content.section.title }}</h1>
+          <div v-html="data.content.section.content"></div>        
+        </div>
+
+ 
       </div>
     </div>
   </div>
@@ -32,7 +50,6 @@
 <script>
 import ClientService from "@/services/client.service";
 import EventBus from "@/common/EventBus";
-import { useRoute } from 'vue-router'
 
 
 export default {
@@ -42,23 +59,44 @@ export default {
       hasError: false,
       hasLoaded: false,
       data: "",
+      editContent: null,
     };
   },
   watch: {
     '$route.params.id': function(val, oldVal){ // Same
     //'$route.path': function(val, oldVal){
+      console.log("changed")
       this.loadData();
     }
   },
   mounted() {
     this.loadData();
-
   },
   methods: {
-    loadData() {
-      this.hasLoaded = false;
+    editClick(){
       ClientService.getSection(this.$route.params.id).then(
         (response) => {
+          this.editContent = response.data;
+        },
+        (error) => {
+          this.editContent =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+        }
+      );
+
+
+    },
+    loadData() {
+      this.hasLoaded = false;
+
+      ClientService.getPageSection(this.$route.params.id).then(
+        (response) => {
+          this.editContent = null;
           this.hasLoaded = true;
           this.data = response.data;
         },

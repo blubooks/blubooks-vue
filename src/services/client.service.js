@@ -11,9 +11,12 @@ class ClientService {
   getCollection(id) {
     return api.get('/page/collection/' + id);
   }
-  getSection(id) {
+  getPageSection(id) {
     return api.get('/page/section/' + id);
   }  
+  getSection(id) {
+    return api.get('/section/' + id);
+  }    
   getBook(id) {
     return api.get('/page/book/' + id);
   }  
