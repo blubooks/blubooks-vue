@@ -1,8 +1,12 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import EventBus from "./common/EventBus";
+import { DialogWrapper } from 'vue3-promise-dialog';
 
 export default {
+  components: {
+    DialogWrapper,
+  },  
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -40,6 +44,8 @@ export default {
 </script>
 
 <template>
+   <div id="app">
+  <DialogWrapper :transition-attrs="{name: 'dialog'}"/>  
   <header>
     <div class="container">
       <nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -90,4 +96,5 @@ export default {
       <router-view />
     </div>
   </main>
+</div>
 </template>

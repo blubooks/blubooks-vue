@@ -4,6 +4,7 @@ import router from './router'
 import store from "./store";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {PromiseDialog} from "vue3-promise-dialog"
 
 
 import './assets/main.scss'
@@ -13,6 +14,6 @@ setupInterceptors(store);
 
 const app = createApp(App)
 
-app.use(router).use(store)
+app.use(PromiseDialog).use(router).use(store)
 
 app.mount('#app')
